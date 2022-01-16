@@ -59,20 +59,18 @@ export class CsvEditorProvider implements vscode.CustomTextEditorProvider {
         // Receive message from the webview.
         webviewPanel.webview.onDidReceiveMessage(e => {
             switch (e.type) {
-                case 'addRow':
-                    this.addRow(document);
-                    return;
-
-                case 'deleteRow':
-                    this.deleteRow(document, e.rowIndex);
-                    return;
-
                 case 'addColumn':
-                    this.addColumn(document);
+                    this.addColumn(document, e.columnIndex, e.isBefore);
                     return;
-
                 case 'deleteColumn':
                     this.deleteColumn(document, e.columnIndex);
+                    return;
+
+                case 'addRow':
+                    this.addRow(document, e.rowIndex, e.isBefore);
+                    return;
+                case 'deleteRow':
+                    this.deleteRow(document, e.rowIndex);
                     return;
 
                 case 'update':
@@ -124,10 +122,12 @@ export class CsvEditorProvider implements vscode.CustomTextEditorProvider {
         
         <body>
             <div id="main">
+                <button id="addColumnBeforeBtn">Add Column Before</button>
                 <button id="addColumnBtn">Add Column</button>
-                <button id="removeColumnBtn">Remove Column</button>
+                <button id="deleteColumnBtn">Remove Column</button> <br />
+                <button id="addRowBeforeBtn">Add Row Before</button>
                 <button id="addRowBtn">Add Row</button>
-                <button id="removeRowBtn">Remove Row</button>
+                <button id="deleteRowBtn">Remove Row</button>
             </div>
         
             <script nonce="${nonce}" src="${scriptUri}"></script>
@@ -136,53 +136,19 @@ export class CsvEditorProvider implements vscode.CustomTextEditorProvider {
         </html>`;
     }
 
-    private addRow(document: vscode.TextDocument) {
+    private addColumn(document: vscode.TextDocument, columnIndex: number, isBefore: boolean) {
         const edit = new vscode.WorkspaceEdit();
-
-        var numberOfColumns = 0;
-        if (document.lineCount > 0) {
-            numberOfColumns = document.lineAt(0).text.split(',').length;
+        if (!isBefore) {
+            columnIndex++
         }
-
-        var newValue = '';
-        for (let i = 1; i < numberOfColumns; i++) {
-            newValue += ',';
-        }
-
-        let workspaceConfiguration = vscode.workspace.getConfiguration('editor');
-        let eol = workspaceConfiguration.get<string>('lineEnding') ?? '\n';
-        let lastLine = document.lineAt(document.lineCount - 1);
-        if (!lastLine.range.isEmpty) {
-            newValue = eol + newValue;
-        }
-        edit.insert(
-            document.uri,
-            lastLine.range.end,
-            newValue);
-
-        return vscode.workspace.applyEdit(edit);
-    }
-
-    private deleteRow(document: vscode.TextDocument, rowIndex: number) {
-        const edit = new vscode.WorkspaceEdit();
-
-        var line = document.lineAt(rowIndex);
-
-        edit.delete(
-            document.uri,
-            line.rangeIncludingLineBreak);
-
-        return vscode.workspace.applyEdit(edit);
-    }
-
-    private addColumn(document: vscode.TextDocument) {
-        const edit = new vscode.WorkspaceEdit();
 
         for (let i = 0; i < document.lineCount; i++) {
             var line = document.lineAt(i);
+            var columns = line.text.split(',');
+            var itemsBefore = columns.slice(0, columnIndex)
             edit.insert(
                 document.uri,
-                line.range.end,
+                new vscode.Position(line.lineNumber, itemsBefore.join(',').length),
                 ',');
         }
 
@@ -201,6 +167,54 @@ export class CsvEditorProvider implements vscode.CustomTextEditorProvider {
                 line.range,
                 columns.join(','));
         }
+
+        return vscode.workspace.applyEdit(edit);
+    }
+
+    private addRow(document: vscode.TextDocument, rowIndex: number, isBefore: boolean) {
+        const edit = new vscode.WorkspaceEdit();
+
+        var numberOfColumns = 0;
+        if (document.lineCount > 0) {
+            numberOfColumns = document.lineAt(0).text.split(',').length;
+        }
+
+        var newValue = '';
+        for (let i = 1; i < numberOfColumns; i++) {
+            newValue += ',';
+        }
+
+        if (!isBefore) {
+            rowIndex++
+        }
+
+        let workspaceConfiguration = vscode.workspace.getConfiguration('editor');
+        let eol = workspaceConfiguration.get<string>('lineEnding') ?? '\n';
+
+        if (rowIndex == document.lineCount) {
+            edit.insert(
+                document.uri,
+                document.lineAt(rowIndex - 1).range.end,
+                eol + newValue);
+        }
+        else {
+            edit.insert(
+                document.uri,
+                document.lineAt(rowIndex).range.start,
+                newValue + eol);
+        }
+
+        return vscode.workspace.applyEdit(edit);
+    }
+
+    private deleteRow(document: vscode.TextDocument, rowIndex: number) {
+        const edit = new vscode.WorkspaceEdit();
+
+        var line = document.lineAt(rowIndex);
+
+        edit.delete(
+            document.uri,
+            line.rangeIncludingLineBreak);
 
         return vscode.workspace.applyEdit(edit);
     }

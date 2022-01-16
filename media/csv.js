@@ -13,18 +13,6 @@
 	let numberOfRows = 0;
 	let isEditMode = false;
 
-	document.getElementById('addColumnBtn').addEventListener('click', () => {
-		vscode.postMessage({
-			type: 'addColumn'
-		});
-	});
-
-	document.getElementById('addRowBtn').addEventListener('click', () => {
-		vscode.postMessage({
-			type: 'addRow'
-		});
-	});
-
 	document.addEventListener('keydown', (e) => {
 		if (!e.altKey && !e.shiftKey && !e.ctrlKey) {
 			var newX = focusedX;
@@ -160,6 +148,10 @@
 							columnContainer.addEventListener('click', () => {
 								focusCell(j, i);
 							});
+							columnContainer.addEventListener('dblclick', () => {
+								focusCell(j, i);
+								openEditor(false);
+							});
 
 							const cellValueContainer = document.createElement('div');
 
@@ -242,10 +234,10 @@
 
 	function focusCell(newX, newY) {
 		// if (focusedX !== newX || focusedY !== newY) {
-			document.getElementById('cell-' + focusedX + '-' + focusedY).classList.remove('focused');
-			focusedX = newX;
-			focusedY = newY;
-			document.getElementById('cell-' + focusedX + '-' + focusedY).classList.add('focused');
+		document.getElementById('cell-' + focusedX + '-' + focusedY).classList.remove('focused');
+		focusedX = newX;
+		focusedY = newY;
+		document.getElementById('cell-' + focusedX + '-' + focusedY).classList.add('focused');
 		// }
 	}
 
@@ -272,5 +264,51 @@
 	const state = vscode.getState();
 	if (state) {
 		updateContent(state.data);
+	}
+
+	hookUpButtons();
+
+	function hookUpButtons() {
+		document.getElementById('addColumnBeforeBtn').addEventListener('click', () => {
+			vscode.postMessage({
+				type: 'addColumn',
+				columnIndex: focusedX,
+				isBefore: true,
+			});
+		});
+		document.getElementById('addColumnBtn').addEventListener('click', () => {
+			vscode.postMessage({
+				type: 'addColumn',
+				columnIndex: focusedX,
+				isBefore: false,
+			});
+		});
+		document.getElementById('deleteColumnBtn').addEventListener('click', () => {
+			vscode.postMessage({
+				type: 'deleteColumn',
+				columnIndex: focusedX,
+			});
+		});
+
+		document.getElementById('addRowBeforeBtn').addEventListener('click', () => {
+			vscode.postMessage({
+				type: 'addRow',
+				rowIndex: focusedY,
+				isBefore: true,
+			});
+		});
+		document.getElementById('addRowBtn').addEventListener('click', () => {
+			vscode.postMessage({
+				type: 'addRow',
+				rowIndex: focusedY,
+				isBefore: false,
+			});
+		});
+		document.getElementById('deleteRowBtn').addEventListener('click', () => {
+			vscode.postMessage({
+				type: 'deleteRow',
+				rowIndex: focusedY,
+			});
+		});
 	}
 }());
