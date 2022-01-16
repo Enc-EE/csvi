@@ -1,0 +1,42 @@
+body {
+	justify-content: center;
+	align-items: center;
+	margin: 1em 2em;
+}
+
+/* tr:nth-child(even) {
+	background-color: var(--vscode-editor-foldBackground);
+} */
+
+/* tr:hover {
+	background-color: #ddd;
+} */
+
+.focused {
+	background-color: var(--vscode-editor-selectionBackground);
+}
+
+.hide {
+	display: none;
+}
+
+table {
+	/* border-collapse: collapse; */
+}
+
+th, tr, td {
+	border: 1px solid var(--vscode-textBlockQuote-border);
+}
+
+tr, td {
+	cursor: pointer;
+}
+
+th {
+	padding: .5em;
+	background-color: var(--vscode-editor-inactiveSelectionBackground);
+}
+
+td {
+	padding: .3em;
+}
