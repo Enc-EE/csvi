@@ -1,14 +1,10 @@
 body {
-	justify-content: center;
-	align-items: center;
-	margin: 1em 2em;
+	/* margin: 1em; */
 }
 
-/* td:hover {
-	background-color: #ddd;
-} */
-
-
+#main {
+	vertical-align: middle;
+}
 
 .focused {
 	background-color: var(--vscode-editor-selectionBackground);
@@ -21,22 +17,32 @@ body {
 
 table {
 	/* border-collapse: collapse; */
+	/* will cause render bugs :( */
 }
 
 th, tr, td {
 	border: 1px solid var(--vscode-textBlockQuote-border);
 }
 
-tr, td {
+td {
 	cursor: pointer;
 }
 
 th {
 	padding: .5em;
+	color: var(--vscode-editor-selectionForeground);
 	background-color: var(--vscode-editor-inactiveSelectionBackground);
 }
 
 td {
 	padding: .3em;
 	min-width: 6em;
+}
+
+.action-separator {
+	width: 1px;
+	height: var(--vscode-editor-font-size);
+	margin: 0 .5em;
+	display: inline-block;
+	background-color: black;
 }

@@ -176,6 +176,7 @@
 			}
 		}
 
+		// todo change focus when deleting
 		focusCell(focusedX, focusedY);
 
 		// let json;

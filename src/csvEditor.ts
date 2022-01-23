@@ -1,6 +1,20 @@
 import * as vscode from 'vscode';
 import { getNonce } from './util';
 
+interface UpdateModelCell {
+    id: string
+    content: string
+}
+
+interface UpdateModelRow {
+    cells: UpdateModelCell[]
+}
+
+interface UpdateModel {
+    csvError: string
+    csvData: UpdateModelRow[]
+}
+
 export class CsvEditorProvider implements vscode.CustomTextEditorProvider {
 
     public static register(context: vscode.ExtensionContext): vscode.Disposable {
@@ -124,7 +138,8 @@ export class CsvEditorProvider implements vscode.CustomTextEditorProvider {
             <div id="main">
                 <button id="addColumnBeforeBtn">Add Column Before</button>
                 <button id="addColumnBtn">Add Column</button>
-                <button id="deleteColumnBtn">Remove Column</button> <br />
+                <button id="deleteColumnBtn">Remove Column</button>
+                <div class="action-separator"></div>
                 <button id="addRowBeforeBtn">Add Row Before</button>
                 <button id="addRowBtn">Add Row</button>
                 <button id="deleteRowBtn">Remove Row</button>
@@ -231,6 +246,4 @@ export class CsvEditorProvider implements vscode.CustomTextEditorProvider {
 
         return vscode.workspace.applyEdit(edit);
     }
-
-
 }
