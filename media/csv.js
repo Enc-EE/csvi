@@ -70,7 +70,7 @@
 	function openEditor(/** @type {Boolean} */ reset) {
 		if (!isEditMode) {
 			isEditMode = true;
-			let focusedCell = document.getElementById('cell-' + focusedX + '-' + focusedY);
+			let focusedCell = /** @type {HTMLDivElement} */ (document.getElementById('cell-' + focusedX + '-' + focusedY));
 			let cellValueContainer = focusedCell.children[0];
 			cellValueContainer.classList.add('hide');
 
@@ -80,6 +80,8 @@
 			if (!reset) {
 				cellEditor.value = cellValueContainer.textContent;
 			}
+
+			cellEditor.style.width = focusedCell.clientWidth + 'px'
 			focusedCell.appendChild(cellEditor);
 			cellEditor.focus();
 			cellEditor.addEventListener('focusout', () => {

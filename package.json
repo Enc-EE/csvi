@@ -1,14 +1,15 @@
 {
 	"name": "csvi",
 	"displayName": "csvi",
-	"description": "",
-	"version": "0.0.3",
+	"description": "csv editor extension for visual studio code",
+	"version": "0.0.4",
 	"engines": {
 		"vscode": "^1.63.0"
 	},
 	"categories": [
 		"Other"
 	],
+	"icon": "./icon128.png",
 	"activationEvents": [
 		"onCustomEditor:csvi.csv"
 	],

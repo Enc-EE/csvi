@@ -4,13 +4,11 @@ body {
 	margin: 1em 2em;
 }
 
-/* tr:nth-child(even) {
-	background-color: var(--vscode-editor-foldBackground);
-} */
-
-/* tr:hover {
+/* td:hover {
 	background-color: #ddd;
 } */
+
+
 
 .focused {
 	background-color: var(--vscode-editor-selectionBackground);
@@ -40,4 +38,5 @@ th {
 
 td {
 	padding: .3em;
+	min-width: 6em;
 }
