@@ -9,7 +9,7 @@
 	"categories": [
 		"Other"
 	],
-	"icon": "./icon128.png",
+	"icon": "icon128.png",
 	"activationEvents": [
 		"onCustomEditor:csvi.csv"
 	],
