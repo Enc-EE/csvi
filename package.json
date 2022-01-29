@@ -2,7 +2,7 @@
 	"name": "csvi",
 	"displayName": "csvi",
 	"description": "csv editor extension for visual studio code",
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"engines": {
 		"vscode": "^1.63.0"
 	},
