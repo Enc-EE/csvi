@@ -114,7 +114,7 @@ export class CsvEditorProvider implements vscode.CustomTextEditorProvider {
         // Use a nonce to whitelist which scripts can be run
         const nonce = getNonce();
 
-        return /* html */`
+        let html = `
         <!DOCTYPE html>
         <html lang="en">
         
@@ -122,33 +122,65 @@ export class CsvEditorProvider implements vscode.CustomTextEditorProvider {
             <meta charset="UTF-8">
         
             <!-- Use a content security policy to only allow loading images from https or from our extension directory, and only allow scripts that have a specific nonce. -->
-            <meta http-equiv="Content-Security-Policy"
-                content="default-src 'none'; img-src ${webview.cspSource}; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';">
+            <!-- meta-content -->
         
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
-            <link href="${styleResetUri}" rel="stylesheet" />
-            <link href="${styleVSCodeUri}" rel="stylesheet" />
-            <link href="${styleMainUri}" rel="stylesheet" />
+            <link href="../media/reset.css" rel="stylesheet" />
+            <link href="../media/vscode.css" rel="stylesheet" />
+            <link href="../media/csv.css" rel="stylesheet" />
+        
+            <link href="../media/vars.css" rel="stylesheet" />
         
             <title>csvi csv</title>
         </head>
         
         <body>
             <div id="main">
-                <button id="addColumnBeforeBtn">Add Column Before</button>
-                <button id="addColumnBtn">Add Column</button>
-                <button id="deleteColumnBtn">Remove Column</button>
-                <div class="action-separator"></div>
-                <button id="addRowBeforeBtn">Add Row Before</button>
-                <button id="addRowBtn">Add Row</button>
-                <button id="deleteRowBtn">Remove Row</button>
+                <div id="head">
+                    <div class="el-grp">
+                        <button id="addRowBeforeBtn">+</button>
+                        Add Row
+                        <!-- <svg viewBox="0 0 20 20">
+                            <line x1="5" y1="6" x2="15" y2="6" />
+                            <line x1="2" y1="10" x2="18" y2="10" />
+                            <line x1="5" y1="14" x2="15" y2="14" />
+                        </svg> -->
+                        <button id="addRowBtn">+</button>
+                    </div>
+                    <button id="deleteRowBtn">Remove Row</button>
+                    <div class="action-separator"></div>
+                    <div class="el-grp">
+                        <button id="addColumnBeforeBtn">+</button>
+                        <!-- <svg viewBox="0 0 20 20">
+                            <line x1="6" y1="5" x2="6" y2="15" />
+                            <line x1="10" y1="2" x2="10" y2="18" />
+                            <line x1="14" y1="5" x2="14" y2="15" />
+                        </svg> -->
+                        Add Column
+                        <button id="addColumnBtn">+</button>
+                    </div>
+                    <button id="deleteColumnBtn">Remove Column</button>
+                </div>
+                <div id="content">
+        
+                </div>
             </div>
         
             <script nonce="${nonce}" src="${scriptUri}"></script>
         </body>
         
-        </html>`;
+        </html>
+        `
+
+        html = html
+            .replace("../media/reset.css", styleResetUri.toString())
+            .replace("../media/vscode.css", styleVSCodeUri.toString())
+            .replace("../media/csv.css", styleMainUri.toString())
+            .replace('<link href="../media/vars.css" rel="stylesheet" />', "")
+            .replace("<!-- meta-content -->", `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${webview.cspSource}; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';">`)
+
+        return html;
     }
 
     private addColumn(document: vscode.TextDocument, columnIndex: number, isBefore: boolean) {

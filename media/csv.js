@@ -5,7 +5,7 @@
 	// @ts-ignore
 	const vscode = acquireVsCodeApi();
 
-	const mainContainer = /** @type {HTMLElement} */ (document.getElementById('main'));
+	const mainContainer = /** @type {HTMLElement} */ (document.getElementById('content'));
 
 	let focusedX = 0;
 	let focusedY = 0;

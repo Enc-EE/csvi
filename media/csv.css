@@ -3,7 +3,8 @@ body {
 }
 
 #main {
-	vertical-align: middle;
+	
+	/* vertical-align: middle; */
 }
 
 .focused {
@@ -15,6 +16,7 @@ body {
 	display: none;
 }
 
+/* table */
 table {
 	/* border-collapse: collapse; */
 	/* will cause render bugs :( */
@@ -39,10 +41,47 @@ td {
 	min-width: 6em;
 }
 
+/* head */
+#head {
+	width: calc(100%);
+	position: fixed;
+	height: 3rem;
+	padding: 0 1rem;
+	border-bottom: 1px solid var(--vscode-focusBorder);
+	display: flex;
+	align-items: center;
+	background-color: var(--vscode-editor-background);
+	gap: .7rem;
+}
+
+#content {
+	padding-top: 3rem;
+	padding-left: .5rem;
+	padding-right: .5rem;
+}
+
 .action-separator {
 	width: 1px;
-	height: var(--vscode-editor-font-size);
+	height: var(--vscode-font-size);
 	margin: 0 .5em;
 	display: inline-block;
 	background-color: black;
+}
+
+svg {
+	height: calc(var(--vscode-font-size) * 2);
+	width: calc(var(--vscode-font-size) * 2);
+	stroke: currentColor;
+	stroke-width: 2;
+	stroke-linecap: round;
+}
+
+.el-grp {
+	display: inline-block;
+	color: var(--vscode-button-foreground);
+	background: var(--vscode-button-background);
+}
+
+.el-grp button {
+	min-width: 3rem;
 }
